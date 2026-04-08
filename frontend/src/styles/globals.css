@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* Design Tokens — Portfolio Design System                                   */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  /* Colors — Primary (Slate/Indigo) */
+  --color-background: #0a0a0a;
+  --color-foreground: #fafafa;
+  --color-primary: #6366f1;
+  --color-primary-foreground: #ffffff;
+  --color-primary-glow: rgba(99, 102, 241, 0.4);
+  --color-secondary: #22c55e;
+  --color-secondary-foreground: #052e16;
+  --color-accent: #f59e0b;
+  --color-accent-foreground: #451a03;
+
+  /* Colors — Neutral */
+  --color-muted: #27272a;
+  --color-muted-foreground: #a1a1aa;
+  --color-border: #27272a;
+  --color-ring: #6366f1;
+
+  /* Colors — Semantic */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Colors — Surface */
+  --color-card: #111111;
+  --color-card-foreground: #fafafa;
+  --color-popover: #111111;
+  --color-popover-foreground: #fafafa;
+  --color-input: #27272a;
+
+  /* Typography */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Spacing */
+  --spacing-container: 1280px;
+
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* Shadows */
+  --shadow-glow: 0 0 20px var(--color-primary-glow);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* Base Styles                                                               */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Selection styles */
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted-foreground);
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* Animation Utilities                                                       */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}

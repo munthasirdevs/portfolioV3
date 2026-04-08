@@ -1,0 +1,236 @@
+###############################################################################
+# CI/CD — Backend (Laravel)
+###############################################################################
+
+name: Backend CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "backend/**"
+      - "backend/composer.json"
+      - "backend/composer.lock"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "backend/**"
+      - "backend/composer.json"
+      - "backend/composer.lock"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PHP_VERSION: "8.3"
+
+jobs:
+  # ──────────────────────────────────────────────────────────────────────────
+  # PHP Syntax & Static Analysis
+  # ──────────────────────────────────────────────────────────────────────────
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_DB: portfolio_test
+          POSTGRES_USER: portfolio_user
+          POSTGRES_PASSWORD: portfolio_secret
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, pdo_pgsql, redis, swoole
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Copy environment file
+        run: cp .env.example .env
+
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Run PHP Lint
+        run: find app -name "*.php" -not -path "*/vendor/*" | xargs -n 1 php -l
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --memory-limit=1G
+
+      - name: Run Laravel Pint (code style)
+        run: vendor/bin/pint --test
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # Tests
+  # ──────────────────────────────────────────────────────────────────────────
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_DB: portfolio_test
+          POSTGRES_USER: portfolio_user
+          POSTGRES_PASSWORD: portfolio_secret
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, pdo_pgsql, redis, swoole
+          coverage: xdebug
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Copy environment file
+        run: cp .env.example .env
+
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Run database migrations
+        run: php artisan migrate --force
+        env:
+          DB_CONNECTION: pgsql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
+          DB_DATABASE: portfolio_test
+          DB_USERNAME: portfolio_user
+          DB_PASSWORD: portfolio_secret
+
+      - name: Run tests
+        run: vendor/bin/pest --coverage --coverage-clover=coverage.xml
+        env:
+          DB_CONNECTION: pgsql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
+          DB_DATABASE: portfolio_test
+          DB_USERNAME: portfolio_user
+          DB_PASSWORD: portfolio_secret
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: 6379
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          file: backend/coverage.xml
+          flags: backend
+          fail_ci_if_error: false
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # Database Migration Check
+  # ──────────────────────────────────────────────────────────────────────────
+  migration-check:
+    name: Migration Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_DB: portfolio_test
+          POSTGRES_USER: portfolio_user
+          POSTGRES_PASSWORD: portfolio_secret
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, pdo_pgsql
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Copy environment file
+        run: cp .env.example .env
+
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Run migrations
+        run: php artisan migrate --force
+        env:
+          DB_CONNECTION: pgsql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
+          DB_DATABASE: portfolio_test
+          DB_USERNAME: portfolio_user
+          DB_PASSWORD: portfolio_secret
+
+      - name: Rollback migrations
+        run: php artisan migrate:rollback --force
+        env:
+          DB_CONNECTION: pgsql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
+          DB_DATABASE: portfolio_test
+          DB_USERNAME: portfolio_user
+          DB_PASSWORD: portfolio_secret
