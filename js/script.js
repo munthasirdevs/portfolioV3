@@ -11,7 +11,7 @@ const PROJECTS = [
     tech_stack: ["Laravel", "React", "MySQL", "Stripe", "Redis"],
     featured: true,
     live_url: "https://example-ecommerce.com",
-    github_url: "https://github.com/munthasir/ecommerce",
+    github_url: "https://github.com/munthasirdevs/ecommerce",
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ const PROJECTS = [
     tech_stack: ["Laravel", "Sanctum", "WebSocket", "PostgreSQL"],
     featured: true,
     live_url: null,
-    github_url: "https://github.com/munthasir/task-api",
+    github_url: "https://github.com/munthasirdevs/task-api",
   },
   {
     id: 3,
@@ -33,7 +33,7 @@ const PROJECTS = [
     tech_stack: ["HTML5", "CSS3", "JavaScript", "Tailwind CSS"],
     featured: false,
     live_url: "https://munthasir.dev",
-    github_url: "https://github.com/munthasir/portfolio",
+    github_url: "https://github.com/munthasirdevs/portfolio",
   },
   {
     id: 4,
@@ -55,7 +55,7 @@ const PROJECTS = [
     tech_stack: ["React Native", "Node.js", "MongoDB", "Firebase"],
     featured: true,
     live_url: null,
-    github_url: "https://github.com/munthasir/fitness-app",
+    github_url: "https://github.com/munthasirdevs/fitness-app",
   },
   {
     id: 6,
@@ -66,7 +66,7 @@ const PROJECTS = [
     tech_stack: ["React", "Storybook", "Figma", "CSS Modules"],
     featured: false,
     live_url: null,
-    github_url: "https://github.com/munthasir/design-system",
+    github_url: "https://github.com/munthasirdevs/design-system",
   },
 ];
 
@@ -641,7 +641,6 @@ function initTestimonials() {
   const dots = document.getElementById("testimonial-dots");
   const prevBtn = document.getElementById("testimonial-prev");
   const nextBtn = document.getElementById("testimonial-next");
-  const autoplayBtn = document.getElementById("testimonial-autoplay");
   let current = 0,
     autoplay = true,
     interval;
@@ -736,15 +735,6 @@ function initTestimonials() {
   if (autoplay) interval = setInterval(next, 5000);
   nextBtn.addEventListener("click", next);
   prevBtn.addEventListener("click", prev);
-  autoplayBtn.addEventListener("click", function () {
-    autoplay = !autoplay;
-    this.textContent = autoplay ? "⏸" : "▶";
-    if (autoplay) {
-      interval = setInterval(next, 5000);
-    } else {
-      clearInterval(interval);
-    }
-  });
   window.addEventListener("resize", function () {
     const spv = getSlidesPerView();
     if (spv !== slidesPerView) {
