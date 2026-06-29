@@ -1420,6 +1420,11 @@ ol {
   outline-color: #25D366;
 }
 
+.icon-github:hover {
+  background-color: #555555;
+  outline-color: #555555;
+}
+
 .icon:hover i {
   animation: shake 0.25s;
 }
@@ -1698,6 +1703,11 @@ ol {
 .footer-socials .icon-whatsapp:hover {
   background-color: #25D366;
   outline-color: #25D366;
+}
+
+.footer-socials .icon-github:hover {
+  background-color: #555555;
+  outline-color: #555555;
 }
 
 .footer-socials .icon:hover i {
