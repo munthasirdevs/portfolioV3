@@ -1,32 +1,32 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description"
-    content="Portfolio of Munthasir Rahman — Full-Stack Developer crafting digital experiences with precision and intention.">
-  <meta name="theme-color" content="#0A0A0A">
-  <meta property="og:title" content="Munthasir Rahman — Full-Stack Developer">
-  <meta property="og:description" content="Crafting digital experiences with precision and intention.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://munthasir.dev">
-  <title>Munthasir Rahman — Full-Stack web Developer</title>
+    content="Portfolio of Munthasir Rahman — Full-Stack Developer crafting digital experiences with precision and intention." />
+  <meta name="theme-color" content="#0A0A0A" />
+  <meta property="og:title" content="Munthasir Rahman — Full-Stack Developer" />
+  <meta property="og:description" content="Crafting digital experiences with precision and intention." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://munthasir.dev" />
+  <title>Munthasir Rahman — Full-Stack Web Developer</title>
 
-  <link rel="preconnect" href="https://api.fontshare.com">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
-  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet" />
   <link
     href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
+    rel="stylesheet" />
 
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 
 <body>
-
   <!-- ===== PRELOADER ===== -->
   <div id="preloader" role="status" aria-label="Loading">
     <div class="preloader-counter" id="preloader-counter">0</div>
@@ -43,7 +43,7 @@
   <header id="navbar" role="banner">
     <div class="container">
       <div class="navbar-inner">
-        <a href="#hero" class="navbar-logo" aria-label="Home">YN<span>.</span></a>
+        <a href="#hero" class="navbar-logo" aria-label="Home">MR<span>.</span></a>
         <nav class="navbar-links" role="navigation" aria-label="Main navigation">
           <a href="#projects" class="navbar-link" data-section="projects">Work</a>
           <a href="#about" class="navbar-link" data-section="about">About</a>
@@ -62,7 +62,7 @@
   </header>
 
   <!-- ===== MOBILE MENU ===== -->
-  <div id="mobile-menu" role="dialog" aria-label="Mobile navigation">
+  <div id="mobile-menu" role="navigation" aria-label="Mobile navigation">
     <a href="#projects" class="mobile-link" data-section="projects">Work</a>
     <a href="#about" class="mobile-link" data-section="about">About</a>
     <a href="#testimonials" class="mobile-link" data-section="testimonials">Testimonials</a>
@@ -80,7 +80,6 @@
 
   <!-- ===== MAIN ===== -->
   <main>
-
     <!-- ===== HERO ===== -->
     <section id="hero">
       <div class="hero-bg-gradient"></div>
@@ -95,18 +94,14 @@
           <span id="typewriter-text">Full-Stack Developer</span><span class="typewriter-cursor"
             aria-hidden="true"></span>
         </p>
-        <p class="hero-tagline" id="hero-tagline">I craft digital experiences that merge <strong
-            class="text-verse">technical precision</strong> with <strong class="text-verse">intentional design</strong>.
+        <p class="hero-tagline" id="hero-tagline">
+          I craft digital experiences that merge
+          <strong class="text-verse">technical precision</strong> with
+          <strong class="text-verse">intentional design</strong>.
         </p>
         <div class="hero-ctas" id="hero-ctas">
           <a href="#projects" class="btn--primary">View Work <span class="arrow">→</span></a>
           <a href="#contact" class="btn--secondary">Hire Me</a>
-        </div>
-      </div>
-      <div class="hero-scroll-indicator" aria-hidden="true">
-        <span class="hero-scroll-text">Scroll</span>
-        <div class="hero-scroll-line">
-          <div class="hero-scroll-fill" id="scroll-fill"></div>
         </div>
       </div>
     </section>
@@ -117,13 +112,6 @@
         <div class="section-header">
           <p class="section-overline">Selected Work</p>
           <h2 class="section-title">Featured Projects</h2>
-        </div>
-        <div class="filter-bar" id="filter-bar">
-          <button class="btn--filter is-active" data-filter="all">All</button>
-          <button class="btn--filter" data-filter="web">Web</button>
-          <button class="btn--filter" data-filter="mobile">Mobile</button>
-          <button class="btn--filter" data-filter="api">API</button>
-          <button class="btn--filter" data-filter="design">Design</button>
         </div>
         <div class="projects-grid" id="projects-grid">
           <!-- Projects rendered by JS -->
@@ -141,37 +129,40 @@
         <div class="about-grid">
           <div class="about-image-col">
             <div class="about-image">
-              <div class="about-image-placeholder">👨‍💻</div>
+              <img src="img/profilePhoto.jpg" alt="Munthasir Rahman" loading="lazy" />
             </div>
-            <p class="about-bio-short">Passionate developer with 5+ years of experience building modern web
-              applications.</p>
           </div>
           <div class="about-content-col">
-            <p class="about-bio">I'm a full-stack developer based in India, specializing in building exceptional digital
-              experiences. With over 5 years of professional experience, I've developed a deep understanding of both
-              frontend and backend technologies, allowing me to bridge the gap between design and engineering.</p>
-            <p class="about-bio">My approach combines technical excellence with thoughtful design — I believe the best
-              products are those where every detail, seen and unseen, works together in harmony. I'm passionate about
-              open source, performant architecture, and interfaces that feel as good as they look.</p>
-            <a href="#contact" class="btn--secondary" style="align-self: flex-start;">Download Resume ↓</a>
+            <p class="about-bio">
+              I'm a Full-Stack Developer focused on building scalable,
+              high-performance web applications and exceptional digital
+              experiences.
+            </p>
+            <p class="about-bio">
+              I specialize in modern frontend and backend
+              technologies, combining clean architecture with intuitive user
+              experiences. Passionate about performance, maintainable code,
+              and continuous learning, I strive to deliver solutions that are
+              both technically robust and thoughtfully designed.
+            </p>
             <div class="timeline">
               <div class="timeline-item">
                 <div class="timeline-dot"></div>
-                <div class="timeline-date">2023 — Present</div>
-                <div class="timeline-role">Senior Full-Stack Developer</div>
-                <div class="timeline-company">Tech Corp — Remote</div>
+                <div class="timeline-date">Nov 2025 — Present</div>
+                <div class="timeline-role">Founder & CEO</div>
+                <div class="timeline-company"><a href="https://www.gitlinkitsolutions.com/" target="_blank" rel="noopener">GitLink IT Solutions</a></div>
               </div>
               <div class="timeline-item">
                 <div class="timeline-dot"></div>
-                <div class="timeline-date">2021 — 2023</div>
-                <div class="timeline-role">Full-Stack Developer</div>
-                <div class="timeline-company">Digital Agency — Bangalore</div>
+                <div class="timeline-date">Feb 2026 — Present</div>
+                <div class="timeline-role">Co-Founder & Senior Developer</div>
+                <div class="timeline-company"><a href="https://xenonstudios.bd/" target="_blank" rel="noopener">Xenon Studios</a></div>
               </div>
               <div class="timeline-item">
                 <div class="timeline-dot"></div>
-                <div class="timeline-date">2019 — 2021</div>
-                <div class="timeline-role">Junior Developer</div>
-                <div class="timeline-company">Startup Inc — Remote</div>
+                <div class="timeline-date">Jun 2026 — Present</div>
+                <div class="timeline-role">Software Developer & CTO</div>
+                <div class="timeline-company"><a href="https://dribblingbd.com/" target="_blank" rel="noopener">DribblingBD</a></div>
               </div>
             </div>
           </div>
@@ -220,11 +211,13 @@
           </div>
         </div>
         <div class="testimonial-controls">
-          <button class="testimonial-arrow" id="testimonial-prev" aria-label="Previous testimonial">←</button>
+          <button class="testimonial-arrow" id="testimonial-prev" aria-label="Previous testimonial">
+            ←
+          </button>
           <div class="testimonial-dots" id="testimonial-dots"></div>
-          <button class="testimonial-arrow" id="testimonial-next" aria-label="Next testimonial">→</button>
-          <button class="testimonial-autoplay-btn" id="testimonial-autoplay" aria-label="Toggle autoplay"
-            title="Toggle autoplay">⏸</button>
+          <button class="testimonial-arrow" id="testimonial-next" aria-label="Next testimonial">
+            →
+          </button>
         </div>
       </div>
     </section>
@@ -237,51 +230,27 @@
           <h2 class="section-title">Let's Work Together</h2>
         </div>
         <div class="contact-grid">
-          <div class="contact-info">
-            <p>I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
-              Feel free to reach out!</p>
-            <div class="contact-detail">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="2" y="4" width="20" height="16" rx="2" />
-                <path d="M22 7l-10 7L2 7" />
-              </svg>
-              <span>hello@munthasir.dev</span>
-            </div>
-            <div class="contact-detail">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 2a10 10 0 0 0-10 10c0 5.523 4.477 10 10 10s10-4.477 10-10A10 10 0 0 0 12 2z" />
-                <path d="M12 6v6l4 2" />
-              </svg>
-              <span>Bangalore, India</span>
-            </div>
-            <div class="contact-socials">
-              <a href="#" class="contact-social-link" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
-              <a href="#" class="contact-social-link" target="_blank" rel="noopener" aria-label="LinkedIn">LI</a>
-              <a href="#" class="contact-social-link" target="_blank" rel="noopener" aria-label="Twitter">TW</a>
-              <a href="#" class="contact-social-link" target="_blank" rel="noopener" aria-label="Dribbble">DR</a>
-            </div>
-          </div>
           <form class="contact-form" id="contact-form" novalidate>
             <div class="form-honeypot" aria-hidden="true">
               <label for="website">Website</label>
-              <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+              <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
             </div>
             <div class="form-group">
               <label for="contact-name" class="form-label">Name</label>
               <input type="text" id="contact-name" name="name" class="form-input" placeholder="Your name" required
-                aria-required="true">
+                aria-required="true" />
               <span class="form-error" id="name-error"></span>
             </div>
             <div class="form-group">
               <label for="contact-email" class="form-label">Email</label>
               <input type="email" id="contact-email" name="email" class="form-input" placeholder="your@email.com"
-                required aria-required="true">
+                required aria-required="true" />
               <span class="form-error" id="email-error"></span>
             </div>
             <div class="form-group">
               <label for="contact-subject" class="form-label">Subject (Optional)</label>
               <input type="text" id="contact-subject" name="subject" class="form-input"
-                placeholder="What's this about?">
+                placeholder="What's this about?" />
             </div>
             <div class="form-group">
               <label for="contact-message" class="form-label">Message</label>
@@ -289,16 +258,50 @@
                 placeholder="Tell me about your project..." required aria-required="true"></textarea>
               <span class="form-error" id="message-error"></span>
             </div>
-            <div id="form-status" class="form-message" style="display:none;"></div>
+            <div id="form-status" class="form-message" style="display: none"></div>
             <button type="submit" class="btn--submit" id="submit-btn">
               <span class="btn-text">Send Message →</span>
               <span class="btn-spinner"></span>
             </button>
           </form>
+          <div class="contact-info">
+            <p>
+              I'm always open to discussing new projects, creative ideas, or
+              opportunities to be part of your vision. Feel free to reach out!
+            </p>
+            <div class="contact-detail">
+              <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+              <span>munthasir.developer@gmail.com</span>
+            </div>
+            <div class="contact-detail">
+              <i class="fa-solid fa-phone" aria-hidden="true"></i>
+              <span>+8801928785877</span>
+            </div>
+            <div class="contact-detail">
+              <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+              <span>Dhaka, Bangladesh</span>
+            </div>
+            <div class="contact-socials">
+              <a href="" class="icon icon-facebook" aria-label="Facebook">
+                <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
+              </a>
+              <a href="" class="icon icon-instagram" aria-label="Instagram">
+                <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+              </a>
+              <a href="" class="icon icon-x" aria-label="X">
+                <i class="fa-brands fa-x-twitter" aria-hidden="true"></i>
+              </a>
+              <a href="" class="icon icon-in" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
+              </a>
+              <a href="" class="icon icon-whatsapp" aria-label="WhatsApp">
+                <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
-
   </main>
 
   <!-- ===== FOOTER ===== -->
@@ -306,8 +309,10 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <h3>YN<span>.</span></h3>
-          <p>Crafting digital experiences with precision and intention.</p>
+          <h3>MR<span>.</span> Munthasir</h3>
+          <p>I build modern, scalable, and high-performance web applications with a strong focus on user experience,
+            clean architecture, and maintainable code. From intuitive interfaces to robust backend systems, I create
+            reliable digital solutions that are fast, secure, and built to scale.</p>
         </div>
         <div class="footer-col">
           <h4>Quick Links</h4>
@@ -321,15 +326,29 @@
         <div class="footer-col">
           <h4>Connect</h4>
           <div class="footer-socials">
-            <a href="#" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
-            <a href="#" target="_blank" rel="noopener" aria-label="LinkedIn">LI</a>
-            <a href="#" target="_blank" rel="noopener" aria-label="Twitter">TW</a>
-            <a href="#" target="_blank" rel="noopener" aria-label="Dribbble">DR</a>
+            <a href="" class="icon icon-facebook" aria-label="Facebook">
+              <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
+            </a>
+            <a href="" class="icon icon-instagram" aria-label="Instagram">
+              <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+            </a>
+            <a href="" class="icon icon-x" aria-label="X">
+              <i class="fa-brands fa-x-twitter" aria-hidden="true"></i>
+            </a>
+            <a href="" class="icon icon-in" aria-label="LinkedIn">
+              <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
+            </a>
+            <a href="" class="icon icon-whatsapp" aria-label="WhatsApp">
+              <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+            </a>
           </div>
         </div>
       </div>
       <div class="footer-copyright">
-        <p>&copy; <span id="current-year"></span> Munthasir Rahman. All rights reserved.</p>
+        <p>
+          &copy; <span id="current-year"></span> Munthasir Rahman. All rights
+          reserved.
+        </p>
       </div>
     </div>
   </footer>
@@ -340,7 +359,6 @@
   <!-- ===== CDN SCRIPTS ===== -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
 
   <script src="js/script.js"></script>
 </body>

@@ -63,7 +63,6 @@
 }
 
 html {
-  scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -386,7 +385,7 @@ ol {
     opacity 0.3s ease;
 }
 
-.hamburger-line + .hamburger-line {
+.hamburger-line+.hamburger-line {
   margin-top: 6px;
 }
 
@@ -510,12 +509,10 @@ ol {
 .hero-bg-gradient {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(232, 93, 58, 0.12) 0%,
-    rgba(184, 217, 74, 0.06) 30%,
-    transparent 60%
-  );
+  background: radial-gradient(circle at 50% 50%,
+      rgba(232, 93, 58, 0.12) 0%,
+      rgba(184, 217, 74, 0.06) 30%,
+      transparent 60%);
   animation: heroGradient 12s ease-in-out infinite alternate;
   pointer-events: none;
 }
@@ -603,6 +600,7 @@ ol {
 }
 
 @keyframes blink {
+
   0%,
   50% {
     opacity: 1;
@@ -687,52 +685,6 @@ ol {
 
 .btn--secondary:active {
   transform: scale(0.98);
-}
-
-.hero-scroll-indicator {
-  position: absolute;
-  bottom: var(--space-8);
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-}
-
-.hero-scroll-text {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--neutral-500);
-}
-
-.hero-scroll-line {
-  width: 1px;
-  height: 48px;
-  background: var(--neutral-700);
-  margin: var(--space-2) auto 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-scroll-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  background: var(--ember);
-  animation: scrollBounce 2s ease-in-out infinite;
-}
-
-@keyframes scrollBounce {
-  0%,
-  100% {
-    transform: translateY(-100%);
-  }
-
-  50% {
-    transform: translateY(100%);
-  }
 }
 
 /* Nav Dots */
@@ -991,7 +943,7 @@ ol {
 
 .about-image {
   width: 100%;
-  max-width: 320px;
+  max-width: 450px;
   aspect-ratio: 3/4;
   background: var(--neutral-800);
   position: relative;
@@ -1407,33 +1359,78 @@ ol {
   color: var(--neutral-300);
 }
 
-.contact-detail svg {
+.contact-detail svg,
+.contact-detail i {
   flex-shrink: 0;
+  width: 20px;
+  font-size: 18px;
+  color: var(--ember);
 }
 
 .contact-socials {
   display: flex;
-  gap: var(--space-3);
+  column-gap: 28px;
   margin-top: var(--space-3);
 }
 
-.contact-social-link {
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--neutral-700);
-  color: var(--neutral-400);
-  font-size: 14px;
-  font-weight: 500;
-  transition: all var(--duration-fast) ease;
+.icon {
+  display: inline-flex;
+  width: 50px;
+  height: 50px;
+  text-decoration: none;
+  font-size: 20px;
+  outline: 2px solid var(--verse);
+  border-radius: 50%;
+  transition-property: outline-offset, outline-color, background-color;
+  transition-duration: 0.25s;
+  color: var(--verse);
 }
 
-.contact-social-link:hover {
-  border-color: var(--ember);
-  color: var(--ember);
-  background: rgba(232, 93, 58, 0.05);
+.icon:hover {
+  outline-offset: 4px;
+  color: white;
+}
+
+.icon i {
+  margin: auto;
+}
+
+.icon-facebook:hover {
+  background-color: #1877F2;
+  outline-color: #1877F2;
+}
+
+.icon-instagram:hover {
+  background-color: red;
+  outline-color: red;
+}
+
+.icon-x:hover {
+  background-color: #000;
+  outline-color: #000;
+}
+
+.icon-in:hover {
+  background-color: #0a66c2;
+  outline-color: #0a66c2;
+}
+
+.icon-whatsapp:hover {
+  background-color: #25D366;
+  outline-color: #25D366;
+}
+
+.icon:hover i {
+  animation: shake 0.25s;
+}
+
+@keyframes shake {
+  10% {
+    transform: rotate(15deg);
+  }
+  20% {
+    transform: rotate(-15deg);
+  }
 }
 
 /* Contact Form */
@@ -1660,25 +1657,51 @@ ol {
 
 .footer-socials {
   display: flex;
-  gap: var(--space-3);
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.footer-socials a {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--neutral-700);
+.footer-socials .icon {
+  width: 38px;
+  height: 38px;
+  font-size: 15px;
+  outline-width: 1.5px;
   color: var(--neutral-400);
-  font-size: 13px;
-  font-weight: 500;
-  transition: all var(--duration-fast) ease;
+  outline-color: var(--neutral-700);
 }
 
-.footer-socials a:hover {
-  border-color: var(--ember);
-  color: var(--ember);
+.footer-socials .icon:hover {
+  color: white;
+  outline-offset: 3px;
+}
+
+.footer-socials .icon-facebook:hover {
+  background-color: #1877F2;
+  outline-color: #1877F2;
+}
+
+.footer-socials .icon-instagram:hover {
+  background-color: red;
+  outline-color: red;
+}
+
+.footer-socials .icon-x:hover {
+  background-color: #000;
+  outline-color: #000;
+}
+
+.footer-socials .icon-in:hover {
+  background-color: #0a66c2;
+  outline-color: #0a66c2;
+}
+
+.footer-socials .icon-whatsapp:hover {
+  background-color: #25D366;
+  outline-color: #25D366;
+}
+
+.footer-socials .icon:hover i {
+  animation: shake 0.25s;
 }
 
 .footer-copyright {
@@ -1726,16 +1749,13 @@ ol {
    REDUCED MOTION
    ======================================== */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-
-  html {
-    scroll-behavior: auto;
   }
 
   .hero-bg-gradient {
@@ -1767,7 +1787,6 @@ ol {
   #cursor-ring,
   #back-to-top,
   #nav-dots,
-  .hero-scroll-indicator {
     display: none !important;
   }
 
@@ -1785,18 +1804,25 @@ ol {
 /* ========================================
    SCROLLBAR
    ======================================== */
-::-webkit-scrollbar {
-  width: 6px;
-}
+@media (hover: hover) and (pointer: fine) {
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
 
-::-webkit-scrollbar-track {
-  background: var(--void);
-}
+  ::-webkit-scrollbar-track {
+    background: var(--void);
+  }
 
-::-webkit-scrollbar-thumb {
-  background: var(--neutral-600);
-}
+  ::-webkit-scrollbar-thumb {
+    background: var(--neutral-600);
+  }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--neutral-500);
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--neutral-500);
+  }
+
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--neutral-600) var(--void);
+  }
 }

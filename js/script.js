@@ -131,26 +131,8 @@ const TESTIMONIALS = [
 ];
 
 /* =============================================
-   GSAP + LENIS SETUP
+   GSAP SETUP
    ============================================= */
-let lenis;
-
-function initLenis() {
-  const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-  if (isTouch) return;
-  lenis = new Lenis({
-    duration: 1.2,
-    easing: function (t) {
-      return Math.min(1, 1.001 - Math.pow(2, -10 * t));
-    },
-    smooth: true,
-  });
-  lenis.on("scroll", ScrollTrigger.update);
-  gsap.ticker.add(function (time) {
-    if (lenis) lenis.raf(time * 1000);
-  });
-  gsap.ticker.lagSmoothing(0);
-}
 
 /* =============================================
    PRELOADER
@@ -213,18 +195,11 @@ function initNavbar() {
   );
 
   const sections = document.querySelectorAll("section[id]");
-  let navItems = [];
-  navLinks.forEach(function (l) {
-    navItems.push(l);
-  });
-  document.querySelectorAll(".nav-dot").forEach(function (d) {
-    navItems.push(d);
-  });
-  var observer = new IntersectionObserver(
+  const observer = new IntersectionObserver(
     function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          var id = entry.target.getAttribute("id");
+          const id = entry.target.getAttribute("id");
           navLinks.forEach(function (link) {
             link.classList.toggle(
               "is-active",
@@ -251,16 +226,22 @@ function initNavbar() {
    CURSOR
    ============================================= */
 function initCursor() {
-  var isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-  var hover = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  const hover = window.matchMedia("(hover: hover) and (pointer: fine)");
   if (isTouch || !hover.matches) return;
-  var dot = document.getElementById("cursor-dot");
-  var ring = document.getElementById("cursor-ring");
+  const dot = document.getElementById("cursor-dot");
+  const ring = document.getElementById("cursor-ring");
   if (!dot || !ring) return;
-  var dX = 0,
-    dY = 0,
-    rX = 0,
-    rY = 0;
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight / 2;
+  let dX = centerX,
+    dY = centerY,
+    rX = centerX,
+    rY = centerY;
+  dot.style.left = centerX + "px";
+  dot.style.top = centerY + "px";
+  ring.style.left = centerX + "px";
+  ring.style.top = centerY + "px";
   document.addEventListener("mousemove", function (e) {
     dX = e.clientX;
     dY = e.clientY;
@@ -277,8 +258,8 @@ function initCursor() {
     requestAnimationFrame(animateRing);
   }
   animateRing();
-  var interactives = document.querySelectorAll(
-    "a, button, .project-card, .testimonial-card, input, textarea",
+  const interactives = document.querySelectorAll(
+    "a, button, .project-card, .testimonial-card, input, textarea, select, [role='button'], [tabindex]:not([tabindex='-1'])",
   );
   interactives.forEach(function (el) {
     el.addEventListener("mouseenter", function () {
@@ -296,7 +277,8 @@ function initCursor() {
    HERO
    ============================================= */
 function initHero() {
-  var tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+  if (typeof gsap === "undefined") return;
+  const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
   tl.from("#hero-overline", { opacity: 0, y: 20, duration: 0.8 })
     .from(
       ".hero-name .line span",
@@ -316,45 +298,51 @@ function initHero() {
    TYPEWRITER
    ============================================= */
 function initTypewriter() {
-  var el = document.getElementById("typewriter-text");
+  const el = document.getElementById("typewriter-text");
   if (!el) return;
-  var phrases = [
+  const phrases = [
     "Full-Stack Developer",
     "UI/UX Designer",
     "Creative Technologist",
     "Interface Architect",
   ];
-  var idx = 0,
+  let idx = 0,
     charIdx = 0,
-    isDeleting = false;
+    isDeleting = false,
+    typeTimer = null;
   function type() {
-    var current = phrases[idx];
+    const current = phrases[idx];
     if (isDeleting) {
       el.textContent = current.substring(0, charIdx--);
       if (charIdx < 0) {
         isDeleting = false;
         idx = (idx + 1) % phrases.length;
-        setTimeout(type, 400);
+        typeTimer = setTimeout(type, 400);
         return;
       }
-      setTimeout(type, 40);
+      typeTimer = setTimeout(type, 40);
     } else {
       el.textContent = current.substring(0, charIdx++);
       if (charIdx > current.length) {
         isDeleting = true;
-        setTimeout(type, 2000);
+        typeTimer = setTimeout(type, 2000);
         return;
       }
-      setTimeout(type, 80);
+      typeTimer = setTimeout(type, 80);
     }
   }
   type();
+  return function cleanup() {
+    if (typeTimer) clearTimeout(typeTimer);
+  };
 }
 
 /* =============================================
    SCROLL ANIMATIONS
    ============================================= */
 function initScrollAnimations() {
+  if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined")
+    return;
   gsap.utils.toArray(".section-header").forEach(function (h) {
     gsap.from(h, {
       opacity: 0,
@@ -450,17 +438,22 @@ function initScrollAnimations() {
    PROJECTS
    ============================================= */
 function initProjects() {
-  var grid = document.getElementById("projects-grid");
-  var filterBtns = document.querySelectorAll(".btn--filter");
-  var currentFilter = "all";
+  const grid = document.getElementById("projects-grid");
+  const filterBtns = document.querySelectorAll(".btn--filter");
+  let currentFilter = "all";
+  let projectTriggers = [];
 
   function render(filter) {
-    var filtered =
+    const filtered =
       filter === "all"
         ? PROJECTS
         : PROJECTS.filter(function (p) {
             return p.category === filter;
           });
+    projectTriggers.forEach(function (st) {
+      if (st && st.kill) st.kill();
+    });
+    projectTriggers = [];
     if (filtered.length === 0) {
       grid.innerHTML =
         '<div class="projects-state"><p>No projects found in this category.</p></div>';
@@ -468,27 +461,27 @@ function initProjects() {
     }
     grid.innerHTML = "";
     filtered.forEach(function (p) {
-      var card = document.createElement("div");
+      const card = document.createElement("div");
       card.className = "project-card";
       card.setAttribute("data-category", p.category);
-      var liveLink = p.live_url
+      const liveLink = p.live_url
         ? '<a href="' +
-          p.live_url +
-          '" target="_blank" class="live-link">Live Preview →</a>'
+          encodeURI(p.live_url) +
+          '" target="_blank" rel="noopener" class="live-link">Live Preview →</a>'
         : "";
-      var codeLink = p.github_url
+      const codeLink = p.github_url
         ? '<a href="' +
-          p.github_url +
-          '" target="_blank" class="code-link">GitHub</a>'
+          encodeURI(p.github_url) +
+          '" target="_blank" rel="noopener" class="code-link">GitHub</a>'
         : "";
-      var tags = p.tech_stack
+      const tags = p.tech_stack
         .map(function (t) {
           return '<span class="project-tag">' + t + "</span>";
         })
         .join("");
       card.innerHTML =
         '<div class="project-card-image">' +
-        '<div style="font-size:48px;">📦</div>' +
+        '<div class="project-card-img-placeholder" aria-hidden="true">📦</div>' +
         '<div class="project-card-overlay"><span>View Case Study →</span></div>' +
         "</div>" +
         '<div class="project-card-body">' +
@@ -508,18 +501,23 @@ function initProjects() {
         "</div>";
       grid.appendChild(card);
     });
-    gsap.from(".project-card", {
-      opacity: 0,
-      y: 60,
-      duration: 0.8,
-      stagger: 0.1,
-      ease: "power3.out",
-      scrollTrigger: {
+    if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+      const st = ScrollTrigger.create({
         trigger: grid,
         start: "top 85%",
-        toggleActions: "play none none none",
-      },
-    });
+        onEnter: function () {
+          gsap.from(".project-card", {
+            opacity: 0,
+            y: 60,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power3.out",
+          });
+        },
+        once: true,
+      });
+      projectTriggers.push(st);
+    }
   }
 
   filterBtns.forEach(function (btn) {
@@ -539,14 +537,14 @@ function initProjects() {
    SKILLS
    ============================================= */
 function initSkills() {
-  var grid = document.getElementById("skills-grid");
-  var categories = {};
-  var catNames = {
+  const grid = document.getElementById("skills-grid");
+  const categories = {};
+  const catNames = {
     frontend: "Frontend",
     backend: "Backend",
     tools: "Tools & Design",
   };
-  var catAccents = {
+  const catAccents = {
     frontend: "border-color: var(--phosphor)",
     backend: "border-color: var(--frost)",
     tools: "border-color: var(--ember)",
@@ -556,7 +554,7 @@ function initSkills() {
     categories[s.category].push(s);
   });
   Object.keys(categories).forEach(function (cat) {
-    var div = document.createElement("div");
+    const div = document.createElement("div");
     div.className = "skill-category";
     div.innerHTML =
       '<h4 style="' +
@@ -579,7 +577,7 @@ function initSkills() {
     });
     grid.appendChild(div);
   });
-  var observer = new IntersectionObserver(
+  const observer = new IntersectionObserver(
     function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
@@ -603,24 +601,24 @@ function initSkills() {
    STATS COUNTERS
    ============================================= */
 function initStats() {
-  var counters = document.querySelectorAll(".stat-value[data-target]");
-  var observer = new IntersectionObserver(
+  const counters = document.querySelectorAll(".stat-value[data-target]");
+  const observer = new IntersectionObserver(
     function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          var el = entry.target;
-          var target = parseInt(el.getAttribute("data-target"));
-          var current = 0;
-          var duration = 2000;
-          var step = Math.ceil(target / (duration / 16));
+          const el = entry.target;
+          const target = parseInt(el.getAttribute("data-target"), 10);
+          let current = 0;
+          const duration = 2000;
+          const step = Math.ceil(target / (duration / 16));
+          const suffixParent = el.closest("[data-suffix]");
+          const suffix = suffixParent
+            ? suffixParent.getAttribute("data-suffix")
+            : "";
           function update() {
             current += step;
             if (current > target) current = target;
-            el.textContent =
-              current +
-              (el.closest("[data-suffix]")
-                ? el.closest("[data-suffix]").getAttribute("data-suffix")
-                : "");
+            el.textContent = current + suffix;
             if (current < target) requestAnimationFrame(update);
           }
           update();
@@ -639,15 +637,15 @@ function initStats() {
    TESTIMONIALS
    ============================================= */
 function initTestimonials() {
-  var track = document.getElementById("testimonials-track");
-  var dots = document.getElementById("testimonial-dots");
-  var prevBtn = document.getElementById("testimonial-prev");
-  var nextBtn = document.getElementById("testimonial-next");
-  var autoplayBtn = document.getElementById("testimonial-autoplay");
-  var current = 0,
+  const track = document.getElementById("testimonials-track");
+  const dots = document.getElementById("testimonial-dots");
+  const prevBtn = document.getElementById("testimonial-prev");
+  const nextBtn = document.getElementById("testimonial-next");
+  const autoplayBtn = document.getElementById("testimonial-autoplay");
+  let current = 0,
     autoplay = true,
     interval;
-  var slidesPerView = getSlidesPerView();
+  let slidesPerView = getSlidesPerView();
 
   function getSlidesPerView() {
     if (window.innerWidth >= 1024) return 3;
@@ -659,9 +657,9 @@ function initTestimonials() {
     track.innerHTML = "";
     dots.innerHTML = "";
     TESTIMONIALS.forEach(function (t, i) {
-      var slide = document.createElement("div");
+      const slide = document.createElement("div");
       slide.className = "testimonial-slide";
-      var initial = t.name
+      const initial = t.name
         .split(" ")
         .map(function (n) {
           return n[0];
@@ -688,11 +686,11 @@ function initTestimonials() {
         "</div>" +
         "</div>";
       track.appendChild(slide);
-      var dot = document.createElement("button");
+      const dot = document.createElement("button");
       dot.className = "testimonial-dot" + (i === 0 ? " is-active" : "");
       dot.setAttribute("data-index", i);
       dot.addEventListener("click", function () {
-        goTo(parseInt(this.getAttribute("data-index")));
+        goTo(parseInt(this.getAttribute("data-index"), 10));
       });
       dots.appendChild(dot);
     });
@@ -700,8 +698,8 @@ function initTestimonials() {
   }
 
   function updateSlide() {
-    var total = TESTIMONIALS.length - slidesPerView;
-    var offset = Math.min(current, total);
+    const total = TESTIMONIALS.length - slidesPerView;
+    let offset = Math.min(current, total);
     if (offset < 0) offset = 0;
     track.style.transform =
       "translateX(-" + offset * (100 / slidesPerView) + "%)";
@@ -719,14 +717,18 @@ function initTestimonials() {
     }
   }
 
+  function getMaxIndex() {
+    return Math.max(1, TESTIMONIALS.length - slidesPerView + 1);
+  }
+
   function next() {
-    current =
-      (current + 1) % Math.max(1, TESTIMONIALS.length - slidesPerView + 1);
+    current = (current + 1) % getMaxIndex();
     updateSlide();
   }
 
   function prev() {
-    current = (current - 1 + TESTIMONIALS.length) % TESTIMONIALS.length;
+    const maxIdx = getMaxIndex();
+    current = (current - 1 + maxIdx) % maxIdx;
     updateSlide();
   }
 
@@ -744,7 +746,7 @@ function initTestimonials() {
     }
   });
   window.addEventListener("resize", function () {
-    var spv = getSlidesPerView();
+    const spv = getSlidesPerView();
     if (spv !== slidesPerView) {
       slidesPerView = spv;
       updateSlide();
@@ -763,7 +765,8 @@ function initTestimonials() {
       next();
   });
   function isInViewport(el) {
-    var r = el.getBoundingClientRect();
+    if (!el) return false;
+    const r = el.getBoundingClientRect();
     return r.top < window.innerHeight && r.bottom > 0;
   }
 }
@@ -772,12 +775,13 @@ function initTestimonials() {
    CONTACT FORM
    ============================================= */
 function initContact() {
-  var form = document.getElementById("contact-form");
-  var submitBtn = document.getElementById("submit-btn");
-  var statusEl = document.getElementById("form-status");
+  const form = document.getElementById("contact-form");
+  const submitBtn = document.getElementById("submit-btn");
+  const statusEl = document.getElementById("form-status");
+  let submitting = false;
 
   function showError(input, msg) {
-    var errorEl = document.getElementById(
+    const errorEl = document.getElementById(
       input.id.replace("contact-", "") + "-error",
     );
     if (errorEl) errorEl.textContent = msg;
@@ -786,7 +790,7 @@ function initContact() {
   }
 
   function clearError(input) {
-    var errorEl = document.getElementById(
+    const errorEl = document.getElementById(
       input.id.replace("contact-", "") + "-error",
     );
     if (errorEl) errorEl.textContent = "";
@@ -795,7 +799,7 @@ function initContact() {
   }
 
   function validateField(input) {
-    var val = input.value.trim();
+    const val = input.value.trim();
     if (input.hasAttribute("required") && !val) {
       showError(input, "This field is required");
       return false;
@@ -812,6 +816,16 @@ function initContact() {
     return true;
   }
 
+  function getFormData() {
+    const data = {};
+    form.querySelectorAll("input, textarea").forEach(function (el) {
+      if (el.name && el.id !== "website") {
+        data[el.name] = el.value.trim();
+      }
+    });
+    return data;
+  }
+
   form.querySelectorAll("input, textarea").forEach(function (input) {
     input.addEventListener("blur", function () {
       if (this.value) validateField(this);
@@ -823,31 +837,29 @@ function initContact() {
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    var inputs = form.querySelectorAll("input[required], textarea[required]");
-    var valid = true;
+    if (submitting) return;
+
+    const inputs = form.querySelectorAll("input[required], textarea[required]");
+    let valid = true;
     inputs.forEach(function (i) {
       if (!validateField(i)) valid = false;
     });
-    var email = document.getElementById("contact-email");
-    if (email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
-      showError(email, "Please enter a valid email");
-      valid = false;
-    }
     if (!valid) return;
 
-    var honeypot = document.getElementById("website");
-    if (honeypot.value) {
-      statusEl.style.display = "block";
-      statusEl.className = "form-message is-success";
-      statusEl.textContent = "Thank you! Your message has been sent.";
-      return;
-    }
+    const honeypot = document.getElementById("website");
+    if (honeypot.value) return;
 
+    submitting = true;
     submitBtn.classList.add("is-loading");
     submitBtn.disabled = true;
     statusEl.style.display = "none";
 
-    setTimeout(function () {
+    const payload = getFormData();
+
+    const endpoint = form.getAttribute("action") || "#";
+    const useFetch = endpoint && endpoint !== "#";
+
+    function handleSuccess() {
       submitBtn.classList.remove("is-loading");
       submitBtn.classList.add("is-success");
       submitBtn.querySelector(".btn-text").textContent = "Message Sent ✓";
@@ -855,16 +867,46 @@ function initContact() {
       statusEl.className = "form-message is-success";
       statusEl.textContent =
         "Thank you for reaching out! I'll get back to you within 24 hours.";
-      form.reset();
       form.querySelectorAll("input, textarea").forEach(function (i) {
         i.classList.remove("is-success", "is-error");
       });
+      form.reset();
       setTimeout(function () {
         submitBtn.classList.remove("is-success");
         submitBtn.querySelector(".btn-text").textContent = "Send Message →";
         submitBtn.disabled = false;
+        submitting = false;
       }, 2500);
-    }, 1500);
+    }
+
+    function handleError(msg) {
+      submitBtn.classList.remove("is-loading");
+      submitBtn.disabled = false;
+      submitting = false;
+      statusEl.style.display = "block";
+      statusEl.className = "form-message is-error";
+      statusEl.textContent = msg || "Something went wrong. Please try again.";
+    }
+
+    if (useFetch) {
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error("Server error");
+          return res.json();
+        })
+        .then(function () {
+          handleSuccess();
+        })
+        .catch(function (err) {
+          handleError(err.message);
+        });
+    } else {
+      setTimeout(handleSuccess, 1500);
+    }
   });
 }
 
@@ -872,7 +914,7 @@ function initContact() {
    BACK TO TOP
    ============================================= */
 function initBackToTop() {
-  var btn = document.getElementById("back-to-top");
+  const btn = document.getElementById("back-to-top");
   window.addEventListener(
     "scroll",
     function () {
@@ -881,7 +923,7 @@ function initBackToTop() {
     { passive: true },
   );
   btn.addEventListener("click", function () {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0 });
   });
 }
 
@@ -905,8 +947,9 @@ document.addEventListener("DOMContentLoaded", function () {
   initStats();
   initTestimonials();
   initContact();
-  initLenis();
-  gsap.registerPlugin(ScrollTrigger);
+  if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+  }
   initHero();
   initScrollAnimations();
 });
